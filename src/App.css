@@ -1953,3 +1953,95 @@ form button:disabled {
 
   font-size: 13px;
 }
+/* =========================================
+   MODEL PERFORMANCE — MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .performance-dashboard {
+    margin-top: 30px;
+    padding: 20px 15px;
+    border-radius: 18px;
+  }
+
+  .performance-heading {
+    margin-bottom: 18px;
+  }
+
+  .performance-heading h2 {
+    font-size: 19px;
+  }
+
+  .performance-heading p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* Model name */
+  .performance-model {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 13px 14px;
+  }
+
+  .performance-model strong {
+    font-size: 13px;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  /* 4 cards → 2 × 2 */
+  .performance-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+  }
+
+  .performance-card {
+    padding: 15px 8px;
+    min-width: 0;
+  }
+
+  .performance-label {
+    font-size: 9px;
+    letter-spacing: 0.4px;
+    line-height: 1.3;
+  }
+
+  .performance-card strong {
+    font-size: 21px;
+  }
+
+  .performance-card small {
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  /* Metric explanations → single column */
+  .metric-explanation {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    margin-top: 14px;
+  }
+
+  .metric-explanation > div {
+    padding: 14px;
+  }
+
+  .metric-explanation strong {
+    font-size: 12px;
+  }
+
+  .metric-explanation p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .performance-disclaimer {
+    margin-top: 15px;
+    padding-top: 14px;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+}
