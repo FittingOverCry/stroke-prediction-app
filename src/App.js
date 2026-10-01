@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
   const [showResults, setShowResults] = useState(false);
+  
   const [formData, setFormData] = useState({
     gender: "Male",
     age: "",
@@ -22,6 +23,42 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [performance, setPerformance] = useState(null);
+  const [performanceLoading, setPerformanceLoading] = useState(true);
+  const [performanceError, setPerformanceError] = useState("");
+
+  useEffect(() => {
+    if (!showResults) return;
+
+    const fetchModelPerformance = async () => {
+      try {
+        setPerformanceLoading(true);
+        setPerformanceError("");
+
+        const response = await fetch(
+          "https://stroke-prediction-api-0nr9.onrender.com/model-performance"
+        );
+        
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Unable to load model performance.");
+        }
+
+        setPerformance(data);
+
+      } catch (err) {
+        console.error("Performance error:", err);
+        setPerformanceError(
+          "Unable to load model performance information."
+        );
+
+      } finally {
+        setPerformanceLoading(false);
+      }
+    }; 
+    fetchModelPerformance();
+  }, [showResults]);
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -271,6 +308,206 @@ if (showResults) {
           This is a model-generated estimate for educational
           purposes and is not a medical diagnosis.
         </p>
+        <div className="performance-dashboard">
+
+          <div className="performance-heading">
+            <div>
+              <h2>Model Performance</h2>
+              <p>Validation results for the machine learning model</p>
+            </div>
+          </div>
+          
+          {performanceLoading ? (
+            <div className="performance-loading">
+              Loading model performance...
+            </div>
+          ) : performanceError ? (
+            <div className="performance-error">
+              {performanceError}
+            </div>
+          ) : performance ? (
+            <>
+              <div className="performance-model">
+                <span>Model</span>
+               <strong>{performance.model}</strong>
+              </div>
+
+              <div className="performance-grid">
+
+                <div className="performance-card">
+                 <span className="performance-label">
+                  ROC-AUC
+                </span>
+
+                <strong>
+                 {performance.roc_auc.toFixed(3)}
+                </strong>
+
+                <small>
+                  Cross-validation
+                </small>
+              </div>
+
+              <div className="performance-card">
+                <span className="performance-label">
+                  Brier Score
+                </span>
+
+                <strong>
+                  {performance.brier_score.toFixed(3)}
+                </strong>
+
+                <small>
+                  Probability calibration
+                </small>
+              </div>
+
+              <div className="performance-card">
+                <span className="performance-label">
+                  CV Variation
+                </span>
+
+                <strong>
+                ±{performance.roc_auc_std.toFixed(3)}
+                </strong>
+
+                <small>
+                  ROC-AUC standard deviation
+                </small>
+              </div>
+
+              <div className="performance-card">
+                <span className="performance-label">
+                  Dataset
+                </span>
+
+                <strong>
+                 {performance.dataset_size.toLocaleString()}
+                </strong>
+
+                <small>
+                  Records
+                </small>
+              </div>
+
+            </div>
+
+            <div className="metric-explanation">
+
+              <div>
+                <strong>ROC-AUC</strong>
+                <p>
+                  Measures how well the model distinguishes between
+                  the two outcome classes across different thresholds.
+                </p>
+              </div>
+
+              <div>
+                <strong>Brier Score</strong>
+                <p>
+                  Measures the accuracy of predicted probabilities.
+                  Lower values indicate smaller probability errors.
+                </p>
+              </div>
+
+            </div>
+
+            <p className="performance-disclaimer">
+              These metrics describe model performance during
+             validation. They do not represent diagnostic accuracy
+             for an individual person.
+            </p>
+          </>
+        ) : null}
+
+      </div>
+
+        <div className="patient-profile">
+          <div className="section-heading">
+            <span className="section-icon">👤</span>
+            <div>
+              <h2>Patient Profile</h2>
+              <p>Information used for this prediction</p>
+            </div>
+          </div>
+
+        <div className="profile-grid">
+
+           <div className="profile-item">
+            <span className="profile-label">Age</span>
+           <span className="profile-value">
+             {formData.age} years
+          </span>
+         </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Gender</span>
+            <span className="profile-value">
+              {formData.gender}
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Hypertension</span>
+            <span className="profile-value">
+              {formData.hypertension === "1" ? "Yes" : "No"}
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Heart Disease</span>
+            <span className="profile-value">
+              {formData.heart_disease === "1" ? "Yes" : "No"}
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Ever Married</span>
+            <span className="profile-value">
+              {formData.ever_married}
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Work Type</span>
+            <span className="profile-value">
+              {formData.work_type}
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Residence Type</span>
+            <span className="profile-value">
+              {formData.Residence_type}
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Avg Glucose Level</span>
+            <span className="profile-value">
+              {formData.avg_glucose_level} mg/dL
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">BMI</span>
+            <span className="profile-value">
+              {formData.bmi}
+            </span>
+          </div>
+
+          <div className="profile-item">
+            <span className="profile-label">Smoking Status</span>
+            <span className="profile-value">
+              {formData.smoking_status 
+              .split(" ") 
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")}
+          </span>
+        </div>
+
+      </div> 
+    </div>
 
         <div className="advice-card">
           {advice.length > 0 ? (
