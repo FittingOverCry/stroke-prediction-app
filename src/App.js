@@ -3,6 +3,7 @@ import "./App.css";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
+  const [showResults, setShowResults] = useState(false);
   const [formData, setFormData] = useState({
     gender: "Male",
     age: "",
@@ -105,6 +106,9 @@ function App() {
       // Get the advice
       setAdvice(data.advice || []);
 
+      // Show the results section
+      setShowResults(true);
+
     } catch (err) {
       console.error("Prediction error:", err);
 
@@ -124,6 +128,7 @@ function App() {
     setResult(null);
     setAdvice([]);
     setError("");
+    setShowResults(false);
   };
 if (showIntro) {
   return (
@@ -181,6 +186,113 @@ if (showIntro) {
 
       </div>
 
+    </div>
+  );
+}
+if (loading) {
+  return (
+    <div className="loading-screen">
+
+      <div className="loading-glow loading-glow-one"></div>
+      <div className="loading-glow loading-glow-two"></div>
+
+      <div className="loading-grid"></div>
+
+      <div className="loader-container">
+
+        <div className="loader-rings">
+          <div className="loader-ring loader-ring-one"></div>
+          <div className="loader-ring loader-ring-two"></div>
+          <div className="loader-ring loader-ring-three"></div>
+
+          <div className="loader-core">
+            ♡
+          </div>
+        </div>
+
+        <h1>Analyzing</h1>
+
+        <p>
+          Processing your information through the
+          machine learning model...
+        </p>
+
+        <div className="loading-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <small>
+          Please wait
+        </small>
+
+      </div>
+
+    </div>
+  );
+}
+if (showResults) {
+  return (
+    <div className="results-screen">
+
+      <div className="results-glow results-glow-one"></div>
+      <div className="results-glow results-glow-two"></div>
+
+      <div className="results-grid"></div>
+
+      <main className="results-content">
+
+        <div className="results-badge">
+          ✦ Analysis Complete
+        </div>
+
+        <h1>Your Prediction</h1>
+
+        <p className="results-subtitle">
+          The model has processed the information you provided.
+        </p>
+
+        <div
+          className="risk-circle"
+          style={{
+            "--risk-deg": `${result * 3.6}deg`
+          }}
+        >
+          <div className="risk-circle-inner">
+            <span>{result}%</span>
+            <small>model estimate</small>
+          </div>
+        </div>
+
+        <h2>Estimated Stroke Risk</h2>
+
+        <p className="results-note">
+          This is a model-generated estimate for educational
+          purposes and is not a medical diagnosis.
+        </p>
+
+        <div className="advice-card">
+          {advice.length > 0 ? (
+            <ul>
+              {advice.map((item, index) => (
+                <li key={index}>{item.advice}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No specific recommendations available.</p>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="back-button"
+          onClick={handleReset}
+        >
+          ← Make Another Prediction
+        </button>
+
+      </main>
     </div>
   );
 }
@@ -310,59 +422,10 @@ if (showIntro) {
       )}
 
         <button type="submit" disabled={loading}>
-          {loading ? "Predicting..." : "Predict Stroke Risk"}
+         Predict Stroke Risk
         </button>
 
       </form>
-
-      {result !== null && (
-        <div className="result-container">
-
-          <h2>Prediction Result</h2>
-
-          <div className="risk-circle"
-            style={{
-              "--risk-deg": `${result * 3.6}deg`
-            }}
-          >
-            <div className="risk-cirlce-inner">
-            <span>{result}%</span>
-            </div>
-          </div>
-
-          <h3>Estimated Stroke Risk</h3>
-
-          <div className="advice-section">
-
-            <h2>Advice</h2>
-
-            {advice.length > 0 ? (
-              advice.map((item, index) => (
-                <div className="advice-card" key={index}>
-
-                  <h4>{item.factor}</h4>
-
-                  <p>{item.advice}</p>
-
-                </div>
-              ))
-            ) : (
-              <p>No specific advice available.</p>
-            )}
-
-          </div>
-
-          <button
-            type="button"
-            className="back-button"
-            onClick={handleReset}
-          >
-            Make Another Prediction
-          </button>
-
-        </div>
-      )}
-
     </div>
   );
 }
