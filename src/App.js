@@ -276,7 +276,7 @@ if (showResults) {
           {advice.length > 0 ? (
             <ul>
               {advice.map((item, index) => (
-                <li key={index}>{item.advice}</li>
+                <li key={index}>{item}</li>
               ))}
             </ul>
           ) : (
