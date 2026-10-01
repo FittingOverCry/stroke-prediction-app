@@ -12,146 +12,108 @@ model = load(MODEL_PATH)
 app = Flask(__name__)
 CORS(app)
 
-ADVICE = {
-    "age": (
-        "Prioritize regular health check-ups and monitoring of blood pressure, "
-        "blood sugar, cholesterol, and other cardiovascular risk factors."
-    ),
-
-    "hypertension": (
-        "Monitor your blood pressure regularly and discuss blood-pressure "
-        "management with a healthcare professional. Taking prescribed medication "
-        "consistently and following medical advice can help reduce stroke risk."
-    ),
-
-    "heart_disease": (
-        "Continue appropriate medical follow-up for your heart condition and "
-        "discuss your stroke risk with your healthcare professional. Follow "
-        "prescribed treatment and monitor relevant cardiovascular risk factors."
-    ),
-
-    "work_type": (
-        "Consider your activity level, work-related stress, sleep, and opportunities "
-        "for healthy meals and physical activity. Build healthy habits around your "
-        "work schedule where possible."
-    ),
-
-    "glucose": (
-        "Discuss elevated blood-glucose levels with a healthcare professional. "
-        "Follow recommended monitoring and management, and maintain a balanced "
-        "eating pattern and regular physical activity."
-    ),
-
-    "bmi": (
-        "If your weight is a health concern, discuss a sustainable approach with "
-        "a healthcare professional. Regular physical activity and a balanced "
-        "eating pattern can support cardiovascular health."
-    ),
-
-    "smoking": (
-        "Stopping smoking can reduce cardiovascular and stroke risk. Consider "
-        "speaking with a healthcare professional about evidence-based "
-        "smoking-cessation support."
-    )
-}
 def get_advice(data):
-    advice = []
+    advice_points = []
 
-    # Hypertension
-    if int(data.get("hypertension", 0)) == 1:
-        advice.append({
-            "factor": "Hypertension",
-            "advice": ADVICE["hypertension"]
-        })
+    if int(data["hypertension"]) == 1:
+        advice_points.append(
+            "Monitor blood pressure regularly."
+        )
 
-    # Heart disease
-    if int(data.get("heart_disease", 0)) == 1:
-        advice.append({
-            "factor": "Heart Disease",
-            "advice": ADVICE["heart_disease"]
-        })
+    if int(data["heart_disease"]) == 1:
+        advice_points.append(
+            "Follow recommended heart-care guidance."
+        )
 
-    # Smoking
-    smoking = str(data.get("smoking_status", "")).lower()
+    if data["smoking_status"] in ["smokes", "formerly smoked"]:
+        advice_points.append(
+            "Avoid or reduce smoking."
+        )
 
-    if smoking in ["smokes", "formerly smoked"]:
-        advice.append({
-            "factor": "Smoking Status",
-            "advice": ADVICE["smoking"]
-        })
+    if float(data["avg_glucose_level"]) > 100:
+        advice_points.append(
+            "Monitor blood glucose levels."
+        )
 
-    # Glucose
-    glucose = float(data.get("avg_glucose_level", 0))
+    if float(data["bmi"]) >= 25:
+        advice_points.append(
+            "Maintain a healthy weight."
+        )
 
-    if glucose > 100:
-        advice.append({
-            "factor": "Glucose Level",
-            "advice": ADVICE["glucose"]
-        })
+    if float(data["age"]) >= 40:
+        advice_points.append(
+            "Have regular health check-ups."
+        )
 
-    # BMI
-    bmi = float(data.get("bmi", 0))
+    return advice_points
 
-    if bmi >= 25:
-        advice.append({
-            "factor": "BMI",
-            "advice": ADVICE["bmi"]
-        })
-
-    # Age
-    age = float(data.get("age", 0))
-
-    if age >= 40:
-        advice.append({
-            "factor": "Age",
-            "advice": ADVICE["age"]
-        })
-
-    return advice
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         data = request.json
 
-        try: 
+        if not data:
+            return jsonify({
+                "error": "No input data received."
+            }), 400
+
+        # Validate numeric fields
+        try:
             age = float(data["age"])
             glucose = float(data["avg_glucose_level"])
             bmi = float(data["bmi"])
         except (KeyError, TypeError, ValueError):
             return jsonify({
                 "error": "Invalid or missing numeric input data."
-                }), 400 
+            }), 400
 
         # Validate ranges
         if age < 0 or age > 120:
             return jsonify({
                 "error": "Age must be between 0 and 120."
-                }), 400
+            }), 400
 
         if glucose < 0 or glucose > 1000:
             return jsonify({
                 "error": "Average glucose level must be between 0 and 1000."
-                }), 400
+            }), 400
 
         if bmi < 0 or bmi > 100:
             return jsonify({
                 "error": "BMI must be between 0 and 100."
-                }), 400
+            }), 400
 
+        # Convert numeric values before sending to model
+        data["age"] = age
+        data["avg_glucose_level"] = glucose
+        data["bmi"] = bmi
+
+        # Create dataframe
         df = pd.DataFrame([data])
 
+        # Make prediction
         prediction = model.predict_proba(df)[0][1]
         risk_percentage = prediction * 100
 
-        advice = get_advice(data)  
+        print(
+            f"Model-estimated risk percentage: "
+            f"{risk_percentage:.2f}%"
+        )
 
-        print(f"Model-estimated risk percentage: {risk_percentage:.2f}%")
+        # Generate combined advice
+        advice = get_advice(data)
 
-        return jsonify({"stroke": round(risk_percentage, 2), 
-        "advice": advice}), 200
+        return jsonify({
+            "stroke": round(risk_percentage, 2),
+            "advice": advice
+        }), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print("Prediction error:", e)
+
+        return jsonify({
+            "error": "An error occurred while generating the prediction."
+        }), 500
     
 @app.route('/')
 def home():
