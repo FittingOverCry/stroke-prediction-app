@@ -1,0 +1,1158 @@
+/* =========================================
+   GLOBAL
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #080b14;
+  color: #edf2ff;
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   ANIMATED BACKGROUND
+========================================= */
+
+.app {
+  min-height: 100vh;
+  width: 100%;
+
+  padding: 55px 20px 80px;
+
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(82, 100, 255, 0.13),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(168, 85, 247, 0.10),
+      transparent 30%
+    ),
+    #080b14;
+}
+
+
+/* Floating ambient lights */
+
+.app::before,
+.app::after {
+  content: "";
+  position: absolute;
+
+  width: 350px;
+  height: 350px;
+
+  border-radius: 50%;
+
+  filter: blur(80px);
+
+  pointer-events: none;
+
+  opacity: 0.35;
+}
+
+.app::before {
+  background: #4f46e5;
+
+  top: -150px;
+  left: -100px;
+
+  animation: floatOne 12s ease-in-out infinite alternate;
+}
+
+.app::after {
+  background: #9333ea;
+
+  right: -150px;
+  bottom: -120px;
+
+  animation: floatTwo 15s ease-in-out infinite alternate;
+}
+
+@keyframes floatOne {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(100px, 80px);
+  }
+}
+
+@keyframes floatTwo {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(-100px, -70px);
+  }
+}
+
+
+/* =========================================
+   CONTENT ABOVE BACKGROUND
+========================================= */
+
+.app > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+.app > h1 {
+  text-align: center;
+
+  margin: 0 0 12px;
+
+  font-size: 44px;
+  font-weight: 800;
+
+  letter-spacing: -1.5px;
+
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #aebcff
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app > h1::after {
+  content: "AI-powered stroke risk estimation";
+
+  display: block;
+
+  margin-top: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  letter-spacing: 0;
+
+  color: #7884a3;
+
+  -webkit-text-fill-color: #7884a3;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+form {
+  width: min(720px, 100%);
+
+  margin: 35px auto 0;
+
+  padding: 38px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px 22px;
+
+  background: rgba(18, 23, 38, 0.86);
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  backdrop-filter: blur(20px);
+}
+
+form label {
+  margin-bottom: -10px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #9ba6c2;
+}
+
+form input,
+form select {
+  width: 100%;
+  height: 48px;
+
+  padding: 0 14px;
+
+  border: 1px solid #293149;
+  border-radius: 12px;
+
+  background: #0f1422;
+
+  color: #edf2ff;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+form input:hover,
+form select:hover {
+  border-color: #3b4664;
+}
+
+form input:focus,
+form select:focus {
+  border-color: #6375ff;
+
+  box-shadow:
+    0 0 0 4px rgba(99, 117, 255, 0.10);
+
+  background: #111729;
+}
+
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+form button {
+  grid-column: 1 / -1;
+
+  height: 54px;
+
+  margin-top: 10px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #5967ff,
+    #7c3aed
+  );
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 30px rgba(91, 103, 255, 0.20);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+form button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 15px 35px rgba(91, 103, 255, 0.30);
+}
+
+form button:active {
+  transform: translateY(0);
+}
+
+form button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.error-message {
+ width: fit-content;
+  max-width: 90%;
+  margin: 15px auto;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 90, 90, 0.35);
+  border-radius: 12px;
+  background: rgba(255, 70, 70, 0.08);
+  color: #ff8b8b;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: errorAppear 0.4s ease;
+}
+@keyframes errorAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================
+   RESULT
+========================================= */
+
+.result-container {
+  width: min(900px, 100%);
+
+  margin: 45px auto 0;
+
+  padding: 45px 40px;
+
+  background: rgba(18, 23, 38, 0.90);
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 28px;
+
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  backdrop-filter: blur(20px);
+
+  text-align: center;
+
+  animation: resultAppear 0.5s ease;
+}
+
+@keyframes resultAppear {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.result-container > h2 {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.result-container > h3 {
+  margin: 18px 0 0;
+
+  color: #7f8ba8;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   ACCURATE RISK CIRCLE
+========================================= */
+
+.risk-circle {
+  width: 210px;
+  height: 210px;
+
+  margin: 32px auto 0;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    conic-gradient(
+      #6472ff 0deg,
+      #9b5cff var(--risk-deg),
+      #252c40 var(--risk-deg),
+      #252c40 360deg
+    );
+
+  position: relative;
+
+  box-shadow:
+    0 0 45px rgba(99, 102, 241, 0.18);
+
+  animation: circleAppear 1s ease;
+}
+
+@keyframes circleAppear {
+  from {
+    transform: scale(0.75) rotate(-20deg);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+
+/* Creates the dark center */
+
+.risk-circle-inner {
+  width: 174px;
+  height: 174px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 40% 30%,
+      #171d30,
+      #0d111d
+    );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  box-shadow:
+    inset 0 0 25px rgba(0, 0, 0, 0.45);
+}
+
+.risk-circle span {
+  font-size: 40px;
+
+  font-weight: 800;
+
+  color: #ffffff;
+
+  letter-spacing: -1px;
+}
+
+.risk-circle small {
+  margin-top: 4px;
+
+  font-size: 11px;
+
+  color: #707b98;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================
+   ADVICE
+========================================= */
+
+.advice-section {
+  margin-top: 50px;
+
+  padding-top: 35px;
+
+  border-top: 1px solid #252c40;
+
+  text-align: left;
+}
+
+.advice-section > h2 {
+  margin: 0 0 20px;
+
+  font-size: 23px;
+  font-weight: 800;
+
+  color: #f1f4ff;
+}
+
+
+/* =========================================
+   ADVICE CARDS
+========================================= */
+
+.advice-card {
+  position: relative;
+
+  margin-bottom: 14px;
+
+  padding: 20px 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.08),
+      rgba(139, 92, 246, 0.035)
+    );
+
+  border: 1px solid #252d43;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.advice-card::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 4px;
+  height: 100%;
+
+  background: linear-gradient(
+    #6472ff,
+    #a855f7
+  );
+}
+
+.advice-card:hover {
+  transform: translateX(5px);
+
+  border-color: #3a4564;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.12),
+      rgba(139, 92, 246, 0.06)
+    );
+}
+
+.advice-card h4 {
+  margin: 0 0 8px 4px;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  color: #dce3ff;
+}
+
+.advice-card p {
+  margin: 0 0 0 4px;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  color: #8995b1;
+}
+
+
+/* =========================================
+   NO ADVICE
+========================================= */
+
+.no-advice {
+  padding: 20px;
+
+  border-radius: 14px;
+
+  background: #101625;
+
+  color: #7f8ba5;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back-button {
+  margin-top: 30px;
+
+  padding: 13px 24px;
+
+  border: 1px solid #303952;
+
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: #aeb8d4;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.back-button:hover {
+  background: #171d2d;
+
+  border-color: #5967ff;
+
+  color: white;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .app {
+    padding: 35px 15px 60px;
+  }
+
+  .app > h1 {
+    font-size: 34px;
+  }
+
+  form {
+    grid-template-columns: 1fr;
+
+    padding: 25px 20px;
+  }
+
+  form button {
+    grid-column: auto;
+  }
+
+  .result-container {
+    padding: 35px 20px;
+  }
+
+  .risk-circle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .risk-circle-inner {
+    width: 150px;
+    height: 150px;
+  }
+
+  .risk-circle span {
+    font-size: 34px;
+  }
+}
+/* =========================================
+   INTRO SCREEN
+========================================= */
+
+.intro-screen {
+  min-height: 100vh;
+  width: 100%;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(79, 70, 229, 0.13),
+      transparent 30%
+    ),
+    #080b14;
+}
+
+
+/* =========================================
+   BACKGROUND GRID
+========================================= */
+
+.intro-grid {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size: 55px 55px;
+
+  mask-image: radial-gradient(
+    ellipse at center,
+    black,
+    transparent 75%
+  );
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   GLOW
+========================================= */
+
+.intro-glow {
+  position: absolute;
+
+  width: 450px;
+  height: 450px;
+
+  border-radius: 50%;
+
+  filter: blur(100px);
+
+  opacity: 0.18;
+
+  pointer-events: none;
+}
+
+.intro-glow-one {
+  background: #4f46e5;
+
+  top: -180px;
+  left: -100px;
+
+  animation: introGlowOne 10s ease-in-out infinite alternate;
+}
+
+.intro-glow-two {
+  background: #9333ea;
+
+  bottom: -180px;
+  right: -100px;
+
+  animation: introGlowTwo 13s ease-in-out infinite alternate;
+}
+
+@keyframes introGlowOne {
+  to {
+    transform: translate(150px, 120px);
+  }
+}
+
+@keyframes introGlowTwo {
+  to {
+    transform: translate(-120px, -100px);
+  }
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.intro-content {
+  position: relative;
+  z-index: 5;
+
+  width: min(650px, 90%);
+
+  text-align: center;
+
+  animation: introContentAppear 1s ease;
+}
+
+@keyframes introContentAppear {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================
+   BADGE
+========================================= */
+
+.intro-badge {
+  display: inline-block;
+
+  padding: 8px 15px;
+
+  border: 1px solid rgba(116, 126, 255, 0.25);
+
+  border-radius: 100px;
+
+  background: rgba(79, 70, 229, 0.08);
+
+  color: #9ba6ff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+.intro-content h1 {
+  margin: 25px 0 15px;
+
+  font-size: clamp(55px, 8vw, 88px);
+
+  line-height: 0.95;
+
+  letter-spacing: -4px;
+
+  font-weight: 900;
+
+  color: white;
+}
+
+.intro-content h1 span {
+  display: block;
+
+  background: linear-gradient(
+    90deg,
+    #6674ff,
+    #a855f7
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.intro-description {
+  max-width: 540px;
+
+  margin: 0 auto;
+
+  color: #858fac;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   START BUTTON
+========================================= */
+
+.start-button {
+  margin-top: 35px;
+
+  padding: 16px 25px 16px 28px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #5967ff,
+    #7c3aed
+  );
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 15px 40px rgba(91, 103, 255, 0.25);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.start-button span {
+  display: inline-block;
+
+  margin-left: 12px;
+
+  font-size: 20px;
+
+  transition: transform 0.25s ease;
+}
+
+.start-button:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 20px 50px rgba(91, 103, 255, 0.35);
+}
+
+.start-button:hover span {
+  transform: translateX(5px);
+}
+
+
+/* =========================================
+   DISCLAIMER
+========================================= */
+
+.intro-disclaimer {
+  max-width: 500px;
+
+  margin: 22px auto 0;
+
+  color: #555f78;
+
+  font-size: 11px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   MEDICAL / AI VISUAL
+========================================= */
+
+.intro-visual {
+  position: absolute;
+
+  width: 450px;
+  height: 450px;
+
+  right: -150px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+
+  opacity: 0.7;
+}
+
+
+/* Rings */
+
+.pulse-ring {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  border: 1px solid rgba(99, 102, 241, 0.18);
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  animation: pulseRing 5s ease-in-out infinite;
+}
+
+.ring-one {
+  width: 160px;
+  height: 160px;
+}
+
+.ring-two {
+  width: 260px;
+  height: 260px;
+
+  animation-delay: 0.8s;
+}
+
+.ring-three {
+  width: 370px;
+  height: 370px;
+
+  animation-delay: 1.6s;
+}
+
+@keyframes pulseRing {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.25;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+
+/* Center */
+
+.heart-icon {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 90px;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.25),
+      rgba(99, 102, 241, 0.04)
+    );
+
+  border: 1px solid rgba(125, 135, 255, 0.3);
+
+  color: #8994ff;
+
+  font-size: 48px;
+
+  box-shadow:
+    0 0 50px rgba(99, 102, 241, 0.20);
+
+  animation: heartPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+
+/* =========================================
+   FLOATING ORBS
+========================================= */
+
+.floating-orb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  background: rgba(130, 140, 255, 0.5);
+
+  box-shadow:
+    0 0 20px rgba(99, 102, 241, 0.5);
+
+  animation: orbFloat 7s ease-in-out infinite;
+}
+
+.orb-one {
+  width: 5px;
+  height: 5px;
+
+  top: 22%;
+  left: 18%;
+}
+
+.orb-two {
+  width: 8px;
+  height: 8px;
+
+  top: 72%;
+  left: 27%;
+
+  animation-delay: 2s;
+}
+
+.orb-three {
+  width: 4px;
+  height: 4px;
+
+  top: 30%;
+  left: 70%;
+
+  animation-delay: 4s;
+}
+
+@keyframes orbFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translateY(-25px);
+    opacity: 0.9;
+  }
+}
+
+
+/* =========================================
+   INTRO MOBILE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .intro-visual {
+    right: -230px;
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .intro-content h1 {
+    letter-spacing: -2px;
+  }
+
+  .intro-description {
+    font-size: 15px;
+  }
+
+  .intro-visual {
+    right: -280px;
+    opacity: 0.18;
+  }
+
+  .intro-grid {
+    background-size: 40px 40px;
+  }
+}
