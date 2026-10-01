@@ -12,6 +12,7 @@ model = load(MODEL_PATH)
 app = Flask(__name__)
 CORS(app)
 
+
 def get_advice(data):
     advice_points = []
 
@@ -47,6 +48,27 @@ def get_advice(data):
 
     return advice_points
 
+
+# ==============================
+# MODEL PERFORMANCE
+# ==============================
+
+@app.route('/model-performance', methods=['GET'])
+def model_performance():
+    return jsonify({
+        "model": "Linear Discriminant Analysis + SMOTE",
+        "dataset_size": 5110,
+        "roc_auc": 0.8374,
+        "roc_auc_std": 0.0301,
+        "brier_score": 0.1878,
+        "evaluation": "Cross-validation"
+    }), 200
+
+
+# ==============================
+# PREDICTION
+# ==============================
+
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -78,9 +100,9 @@ def predict():
                 "error": "Average glucose level must be between 0 and 1000."
             }), 400
 
-        if bmi < 0 or bmi > 100:
+        if bmi < 0 or bmi > 50:
             return jsonify({
-                "error": "BMI must be between 0 and 100."
+                "error": "BMI must be between 0 and 50."
             }), 400
 
         # Convert numeric values before sending to model
@@ -100,7 +122,7 @@ def predict():
             f"{risk_percentage:.2f}%"
         )
 
-        # Generate combined advice
+        # Generate advice
         advice = get_advice(data)
 
         return jsonify({
@@ -114,13 +136,22 @@ def predict():
         return jsonify({
             "error": "An error occurred while generating the prediction."
         }), 500
-    
+
+
+# ==============================
+# HOME
+# ==============================
+
 @app.route('/')
 def home():
     return "Welcome to the Stroke Prediction API"
 
-if __name__ == "__main__":
 
+# ==============================
+# RUN SERVER
+# ==============================
+
+if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000)),
