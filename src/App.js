@@ -242,9 +242,10 @@ if (showAboutModel) {
 
         <button
           className="about-back-button"
-          onClick={() => setShowAboutModel(false)}
+          onClick={() =>setShowAboutModel(false)}
         >
-          ← Back
+          <span className="back-arrow">←</span> 
+          <span>Back</span>
         </button>
 
         <div className="intro-badge">
@@ -595,9 +596,10 @@ if (showResults) {
       <button
       type="button"
       className="form-back-button"
-      onClick={() => setShowIntro(true)}  
+      onClick={() => {setError(""); setShowIntro(true)}} 
       >
-         ← Back
+        <span className="back-arrow">←</span> 
+        <span>Back</span>
       </button>
 
       <h1>Stroke Prediction</h1>
