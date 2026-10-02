@@ -3,6 +3,7 @@ import "./App.css";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
+  const [showAboutModel, setShowAboutModel] = useState(false);
   const [showResults, setShowResults] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ function App() {
   const [performanceError, setPerformanceError] = useState("");
 
   useEffect(() => {
-    if (!showResults) return;
+    if (!showAboutModel) return;
 
     const fetchModelPerformance = async () => {
       try {
@@ -58,7 +59,7 @@ function App() {
       }
     }; 
     fetchModelPerformance();
-  }, [showResults]);
+  }, [showAboutModel]);
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -167,7 +168,7 @@ function App() {
     setError("");
     setShowResults(false);
   };
-if (showIntro) {
+if (showIntro && !showAboutModel && !showResults) {
   return (
     <div className="intro-screen">
 
@@ -203,7 +204,12 @@ if (showIntro) {
           Start Assessment
           <span>→</span>
         </button>
-
+        <button
+          className="about-model-button"
+          onClick={() => setShowAboutModel(true)}
+        >
+          About the Model
+        </button>
         <p className="intro-disclaimer">
           This tool provides a model-generated estimate for
           educational purposes and is not a medical diagnosis.
@@ -223,6 +229,170 @@ if (showIntro) {
 
       </div>
 
+    </div>
+  );
+}
+if (showAboutModel) {
+  return (
+    <div className="about-model-screen">
+
+      <div className="intro-grid"></div>
+
+      <div className="about-model-content">
+
+        <button
+          className="about-back-button"
+          onClick={() => setShowAboutModel(false)}
+        >
+          ← Back
+        </button>
+
+        <div className="intro-badge">
+          ✦ About StrokeSense
+        </div>
+
+        <h1>
+          About the <span>Model</span>
+        </h1>
+
+        <p className="about-model-description">
+          StrokeSense uses a machine-learning model to estimate
+          stroke risk from selected health and lifestyle factors.
+        </p>
+
+        <section className="about-section">
+          <h2>How it works</h2>
+
+          <p>
+            The system uses Linear Discriminant Analysis (LDA)
+            with SMOTE to process the information entered in
+            the assessment and generate a model-based risk estimate.
+          </p>
+        </section>
+
+        <section className="about-section">
+          <h2>Model Performance</h2>
+
+          {performanceLoading ? (
+            <div className="performance-loading">
+              Loading model performance...
+            </div>
+          ) : performanceError ? (
+            <div className="performance-error">
+              {performanceError}
+            </div>
+          ) : performance ? (
+            <>
+              <div className="performance-model">
+                <span>Model</span>
+                <strong>{performance.model}</strong>
+              </div>
+
+              <div className="performance-grid">
+
+                <div className="performance-card">
+                  <span className="performance-label">
+                    ROC-AUC
+                  </span>
+
+                  <strong>
+                    {performance.roc_auc.toFixed(3)}
+                  </strong>
+
+                  <small>
+                    Cross-validation
+                  </small>
+                </div>
+
+                <div className="performance-card">
+                  <span className="performance-label">
+                    Brier Score
+                  </span>
+
+                  <strong>
+                    {performance.brier_score.toFixed(3)}
+                  </strong>
+
+                  <small>
+                    Probability calibration
+                  </small>
+                </div>
+
+                <div className="performance-card">
+                  <span className="performance-label">
+                    CV Variation
+                  </span>
+
+                  <strong>
+                    ±{performance.roc_auc_std.toFixed(3)}
+                  </strong>
+
+                  <small>
+                    ROC-AUC standard deviation
+                  </small>
+                </div>
+
+                <div className="performance-card">
+                  <span className="performance-label">
+                    Dataset
+                  </span>
+
+                  <strong>
+                    {performance.dataset_size.toLocaleString()}
+                  </strong>
+
+                  <small>
+                    Records
+                  </small>
+                </div>
+
+              </div>
+            </>
+          ) : null}
+        </section>
+
+        <section className="about-section">
+          <h2>What do these metrics mean?</h2>
+
+          <div className="metric-explanation">
+
+            <div>
+              <strong>ROC-AUC</strong>
+              <p>
+                Measures how well the model distinguishes between
+                the two outcome classes across different thresholds.
+              </p>
+            </div>
+
+            <div>
+              <strong>Brier Score</strong>
+              <p>
+                Measures the accuracy of predicted probabilities.
+                Lower values indicate smaller probability errors.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        <div className="about-warning">
+          <strong>Important</strong>
+
+          <p>
+            These metrics describe model performance during
+            validation. They do not represent diagnostic accuracy
+            for an individual person.
+          </p>
+        </div>
+
+        <button
+          className="about-back-button bottom"
+          onClick={() => setShowAboutModel(false)}
+        >
+          ← Back to StrokeSense
+        </button>
+
+      </div>
     </div>
   );
 }
@@ -308,120 +478,6 @@ if (showResults) {
           This is a model-generated estimate for educational
           purposes and is not a medical diagnosis.
         </p>
-        <div className="performance-dashboard">
-
-          <div className="performance-heading">
-            <div>
-              <h2>Model Performance</h2>
-              <p>Validation results for the machine learning model</p>
-            </div>
-          </div>
-          
-          {performanceLoading ? (
-            <div className="performance-loading">
-              Loading model performance...
-            </div>
-          ) : performanceError ? (
-            <div className="performance-error">
-              {performanceError}
-            </div>
-          ) : performance ? (
-            <>
-              <div className="performance-model">
-                <span>Model</span>
-               <strong>{performance.model}</strong>
-              </div>
-
-              <div className="performance-grid">
-
-                <div className="performance-card">
-                 <span className="performance-label">
-                  ROC-AUC
-                </span>
-
-                <strong>
-                 {performance.roc_auc.toFixed(3)}
-                </strong>
-
-                <small>
-                  Cross-validation
-                </small>
-              </div>
-
-              <div className="performance-card">
-                <span className="performance-label">
-                  Brier Score
-                </span>
-
-                <strong>
-                  {performance.brier_score.toFixed(3)}
-                </strong>
-
-                <small>
-                  Probability calibration
-                </small>
-              </div>
-
-              <div className="performance-card">
-                <span className="performance-label">
-                  CV Variation
-                </span>
-
-                <strong>
-                ±{performance.roc_auc_std.toFixed(3)}
-                </strong>
-
-                <small>
-                  ROC-AUC standard deviation
-                </small>
-              </div>
-
-              <div className="performance-card">
-                <span className="performance-label">
-                  Dataset
-                </span>
-
-                <strong>
-                 {performance.dataset_size.toLocaleString()}
-                </strong>
-
-                <small>
-                  Records
-                </small>
-              </div>
-
-            </div>
-
-            <div className="metric-explanation">
-
-              <div>
-                <strong>ROC-AUC</strong>
-                <p>
-                  Measures how well the model distinguishes between
-                  the two outcome classes across different thresholds.
-                </p>
-              </div>
-
-              <div>
-                <strong>Brier Score</strong>
-                <p>
-                  Measures the accuracy of predicted probabilities.
-                  Lower values indicate smaller probability errors.
-                </p>
-              </div>
-
-            </div>
-
-            <p className="performance-disclaimer">
-              These metrics describe model performance during
-             validation. They do not represent diagnostic accuracy
-             for an individual person.
-            </p>
-          </>
-        ) : null}
-
-      </div>
-
         <div className="patient-profile">
           <div className="section-heading">
             <span className="section-icon">👤</span>
@@ -535,6 +591,14 @@ if (showResults) {
 }
   return (
     <div className="app">
+
+      <button
+      type="button"
+      className="form-back-button"
+      onClick={() => setShowIntro(true)}  
+      >
+         ← Back
+      </button>
 
       <h1>Stroke Prediction</h1>
 
