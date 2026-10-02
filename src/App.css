@@ -2356,6 +2356,7 @@ form button:disabled {
 .form-back-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 
   margin-bottom: 20px;
@@ -2369,8 +2370,9 @@ form button:disabled {
 
   font-size: 12px;
   font-weight: 700;
-
+  line-height: 1;
   cursor: pointer;
+
   transition: 0.2s ease;
 }
 
@@ -2378,4 +2380,39 @@ form button:disabled {
   background: rgba(255, 255, 255, 0.07);
   color: white;
   border-color: rgba(130, 140, 255, 0.35);
+}
+.about-back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  margin-bottom: 20px;
+  padding: 9px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.03);
+  color: #9da7c2;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.about-back-button:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+  border-color: rgba(130, 140, 255, 0.35);
+}
+
+.back-arrow {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  transform: translateY(-1px);
 }
