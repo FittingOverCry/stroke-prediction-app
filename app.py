@@ -398,10 +398,13 @@ def predict():
 
         }), 200
 
-except Exception:
-    return jsonify({
-        "error": "An error occurred while generating the prediction."
-    }), 500
+        except Exception as e:
+            print("PREDICTION ERROR:", repr(e))
+        except Exception:
+            return jsonify({
+                "error": str(e)
+                    "error": "An error occurred while generating the prediction."
+        }), 500
 
 
 # ============================================================
