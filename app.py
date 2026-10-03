@@ -167,7 +167,6 @@ def predict():
 
         data = request.json
 
-
         # ----------------------------------------------------
         # CHECK INPUT
         # ----------------------------------------------------
@@ -175,61 +174,37 @@ def predict():
         if not data:
 
             return jsonify({
-
-                "error":
-                    "No input data received."
-
+                "error": "No input data received."
             }), 400
-
 
         # ----------------------------------------------------
         # REQUIRED FEATURES
         # ----------------------------------------------------
 
         required_features = [
-
             'gender',
-
             'age',
-
             'hypertension',
-
             'heart_disease',
-
             'work_type',
-
             'Residence_type',
-
             'avg_glucose_level',
-
             'bmi',
-
             'smoking_status'
         ]
 
-
         missing_features = [
-
             feature
-
             for feature in required_features
-
             if feature not in data
         ]
-
 
         if missing_features:
 
             return jsonify({
-
-                "error":
-                    "Missing required fields.",
-
-                "missing":
-                    missing_features
-
+                "error": "Missing required fields.",
+                "missing": missing_features
             }), 400
-
 
         # ----------------------------------------------------
         # NUMERIC VALIDATION
@@ -237,17 +212,9 @@ def predict():
 
         try:
 
-            age = float(
-                data["age"]
-            )
-
-            glucose = float(
-                data["avg_glucose_level"]
-            )
-
-            bmi = float(
-                data["bmi"]
-            )
+            age = float(data["age"])
+            glucose = float(data["avg_glucose_level"])
+            bmi = float(data["bmi"])
 
         except (
             KeyError,
@@ -256,12 +223,8 @@ def predict():
         ):
 
             return jsonify({
-
-                "error":
-                    "Invalid or missing numeric input data."
-
+                "error": "Invalid or missing numeric input data."
             }), 400
-
 
         # ----------------------------------------------------
         # RANGE VALIDATION
@@ -270,43 +233,28 @@ def predict():
         if age < 0 or age > 120:
 
             return jsonify({
-
-                "error":
-                    "Age must be between 0 and 120."
-
+                "error": "Age must be between 0 and 120."
             }), 400
-
 
         if glucose < 0 or glucose > 1000:
 
             return jsonify({
-
-                "error":
-                    "Average glucose level must be between 0 and 1000."
-
+                "error": "Average glucose level must be between 0 and 1000."
             }), 400
-
 
         if bmi < 0 or bmi > 50:
 
             return jsonify({
-
-                "error":
-                    "BMI must be between 0 and 50."
-
+                "error": "BMI must be between 0 and 50."
             }), 400
-
 
         # ----------------------------------------------------
         # CONVERT NUMERIC VALUES
         # ----------------------------------------------------
 
         data["age"] = age
-
         data["avg_glucose_level"] = glucose
-
         data["bmi"] = bmi
-
 
         # ----------------------------------------------------
         # ONLY MODEL FEATURES
@@ -314,34 +262,17 @@ def predict():
 
         model_data = {
 
-            'gender':
-                data['gender'],
+            'gender': data['gender'],
+            'age': data['age'],
+            'hypertension': int(data['hypertension']),
+            'heart_disease': int(data['heart_disease']),
+            'work_type': data['work_type'],
+            'Residence_type': data['Residence_type'],
+            'avg_glucose_level': data['avg_glucose_level'],
+            'bmi': data['bmi'],
+            'smoking_status': data['smoking_status']
 
-            'age':
-                data['age'],
-
-            'hypertension':
-                int(data['hypertension']),
-
-            'heart_disease':
-                int(data['heart_disease']),
-
-            'work_type':
-                data['work_type'],
-
-            'Residence_type':
-                data['Residence_type'],
-
-            'avg_glucose_level':
-                data['avg_glucose_level'],
-
-            'bmi':
-                data['bmi'],
-
-            'smoking_status':
-                data['smoking_status']
         }
-
 
         # ----------------------------------------------------
         # DATAFRAME
@@ -350,7 +281,6 @@ def predict():
         df = pd.DataFrame(
             [model_data]
         )
-
 
         # ----------------------------------------------------
         # PREDICTION
@@ -365,12 +295,10 @@ def predict():
             prediction * 100
         )
 
-
         print(
             f"Model-estimated risk percentage: "
             f"{risk_percentage:.2f}%"
         )
-
 
         # ----------------------------------------------------
         # ADVICE
@@ -379,7 +307,6 @@ def predict():
         advice = get_advice(
             data
         )
-
 
         # ----------------------------------------------------
         # RESPONSE
@@ -398,14 +325,24 @@ def predict():
 
         }), 200
 
-        except Exception as e:
-            print("PREDICTION ERROR:", repr(e))
-        except Exception:
-            return jsonify({
-                "error": str(e)
-                    "error": "An error occurred while generating the prediction."
+    except Exception as e:
+
+        print(
+            "PREDICTION ERROR:",
+            repr(e)
+        )
+
+        return jsonify({
+
+            "error":
+                "An error occurred while generating the prediction.",
+
+            "details":
+                str(e)
+
         }), 500
 
+    
 # ============================================================
 # HOME
 # ============================================================
