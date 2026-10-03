@@ -40,7 +40,7 @@ function App() {
         setPerformanceError("");
 
         const response = await fetch(
-          "http://192.168.1.3:5000/model-performance"
+          "https://stroke-prediction-api-0nr9.onrender.com/model-performance"
         );
 
         const data = await response.json();
@@ -148,7 +148,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://192.168.1.3:5000/predict",
+        "https://stroke-prediction-api-0nr9.onrender.com/predict",
         {
           method: "POST",
 
