@@ -40,7 +40,7 @@ function App() {
         setPerformanceError("");
 
         const response = await fetch(
-          "https://stroke-prediction-api-0nr9.onrender.com/model-performance"
+          "http://192.168.1.3:5000/model-performance"
         );
 
         const data = await response.json();
@@ -74,6 +74,8 @@ function App() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    console.log("Changed", name, value);
 
     // Prevent negative values
     if (
@@ -112,6 +114,11 @@ function App() {
 
     /* Required fields */
 
+    if (formData.gender === "") {
+      setError("Please select a gender.");
+      return;
+    }
+
     if (
       formData.age === "" ||
       formData.avg_glucose_level === "" ||
@@ -147,8 +154,10 @@ function App() {
     setLoading(true);
 
     try {
+      console.log("FORM DATA BEFORE SUBMIT:", formData);
+    
       const response = await fetch(
-        "https://stroke-prediction-api-0nr9.onrender.com/predict",
+        "http://192.168.1.3:5000/predict",
         {
           method: "POST",
 
@@ -178,6 +187,8 @@ function App() {
           data.error || "Prediction failed"
         );
       }
+
+      console.log("FORM DATA BEFORE RESULTS:", formData);
 
       /* Get prediction */
 
@@ -293,15 +304,66 @@ function App() {
 
         <div className="intro-visual">
 
+            {/* Central medical core */}
           <div className="pulse-ring ring-one"></div>
           <div className="pulse-ring ring-two"></div>
           <div className="pulse-ring ring-three"></div>
 
-          <div className="heart-icon">
-            ♡
+          <div className="heart-core">
+            <span>♡</span>
+            <div className="core-pulse"></div>
           </div>
 
-        </div>
+           {/* Connecting lines */}
+          <div className="network-line line-one"></div>
+          <div className="network-line line-two"></div>
+          <div className="network-line line-three"></div>
+          <div className="network-line line-four"></div>
+
+           {/* Data nodes */}
+          <div className="data-node node-one"></div>
+          <div className="data-node node-two"></div>
+          <div className="data-node node-three"></div>
+          <div className="data-node node-four"></div>
+          <div className="data-node node-five"></div>
+
+           {/* Floating information cards */}
+          <div className="medical-card card-glucose">
+            <span className="card-icon">◉</span>
+            <div>
+              <small>GLUCOSE</small>
+             <strong>mg/dL</strong>
+            </div>
+          </div>
+
+          <div className="medical-card card-bmi">
+              <span className="card-icon">◌</span>
+            <div>
+              <small>BMI</small>
+              <strong>HEALTH</strong>
+            </div>
+          </div>
+
+          <div className="medical-card card-age">
+            <span className="card-icon">⌁</span>
+            <div>
+              <small>AGE</small>
+              <strong>FACTOR</strong>
+            </div>
+          </div>
+
+          {/* ECG */}
+          <div className="ecg-container">
+            <div className="ecg-label">LIVE MODEL SIGNAL</div>
+            <svg viewBox="0 0 420 100" preserveAspectRatio="none">
+              <polyline
+                className="ecg-line"
+                points="0,55 55,55 75,54 90,55 105,55 120,18 135,82 150,45 165,55 225,55 245,54 260,55 275,55 290,20 305,80 320,45 335,55 420,55"
+              />
+            </svg>
+            </div>
+
+          </div>
 
       </div>
     );
@@ -674,7 +736,12 @@ function App() {
 
               <div className="profile-item">
                 <span>Gender</span>
-                <strong>{formData.gender}</strong>
+                <strong>{formData.gender === "Male" 
+                  ? "Male" 
+                  : formData.gender === "Female" 
+                  ? "Female" 
+                  : formData.gender}
+                </strong>
               </div>
 
               <div className="profile-item">
@@ -840,6 +907,10 @@ function App() {
           value={formData.gender}
           onChange={handleChange}
         >
+          <option value="">
+            Select Gender
+          </option>
+
           <option value="Male">
             Male
           </option>
