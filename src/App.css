@@ -981,20 +981,20 @@ form button:disabled {
 }
 
 .ring-one {
-  width: 160px;
-  height: 160px;
+  width: 190px;
+  height: 190px;
 }
 
 .ring-two {
-  width: 260px;
-  height: 260px;
+  width: 310px;
+  height: 310px;
 
   animation-delay: 0.8s;
 }
 
 .ring-three {
-  width: 370px;
-  height: 370px;
+  width: 450px;
+  height: 450px;
 
   animation-delay: 1.6s;
 }
@@ -1123,14 +1123,14 @@ form button:disabled {
    INTRO MOBILE
 ========================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .intro-visual {
-    right: -230px;
-    opacity: 0.35;
+    right: -236px;
+    opacity: 0.45;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .intro-content h1 {
     letter-spacing: -2px;
   }
@@ -1140,7 +1140,7 @@ form button:disabled {
   }
 
   .intro-visual {
-    right: -280px;
+    right: -390px;
     opacity: 0.18;
   }
 
@@ -2603,4 +2603,401 @@ form button:disabled {
   font-size: 18px;
   line-height: 1;
   transform: translateY(-1px);
+}
+/* =========================================
+   ENHANCED INTRO MEDICAL VISUAL
+========================================= */
+
+.intro-visual {
+  width: 800px;
+  height: 800px;
+  position: absolute;
+  right: 250px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* Central core */
+
+.heart-core {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 105px;
+  height: 105px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.28),
+      rgba(99, 102, 241, 0.05) 65%,
+      transparent
+    );
+
+  border: 1px solid rgba(125, 135, 255, 0.4);
+
+  box-shadow:
+    0 0 35px rgba(99, 102, 241, 0.25),
+    inset 0 0 25px rgba(99, 102, 241, 0.12);
+
+  z-index: 5;
+
+  animation: coreFloat 4s ease-in-out infinite;
+}
+
+.heart-core span {
+  color: #aab3ff;
+
+  font-size: 54px;
+
+  line-height: 1;
+
+  text-shadow:
+    0 0 20px rgba(130, 140, 255, 0.7);
+}
+
+.core-pulse {
+  position: absolute;
+
+  width: 125px;
+  height: 125px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(100, 114, 255, 0.25);
+
+  animation: corePulse 2.5s ease-out infinite;
+}
+
+@keyframes coreFloat {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-8px);
+  }
+}
+
+
+/* =========================================
+   NETWORK LINES
+========================================= */
+
+.network-line {
+  position: absolute;
+
+  height: 1px;
+
+  transform-origin: left center;
+
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.55),
+    rgba(99, 102, 241, 0)
+  );
+
+  opacity: 0.5;
+
+  z-index: 1;
+}
+
+.line-one {
+  width: 190px;
+  left: 8%;
+  top: 31%;
+  transform: rotate(25deg);
+}
+
+.line-two {
+  width: 170px;
+  left: 55%;
+  top: 28%;
+  transform: rotate(145deg);
+}
+
+.line-three {
+  width: 210px;
+  left: 13%;
+  top: 70%;
+  transform: rotate(-20deg);
+}
+
+.line-four {
+  width: 190px;
+  left: 58%;
+  top: 68%;
+  transform: rotate(155deg);
+}
+
+
+/* =========================================
+   DATA NODES
+========================================= */
+
+.data-node {
+  position: absolute;
+
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #8994ff;
+
+  box-shadow:
+    0 0 12px rgba(120, 130, 255, 0.8);
+
+  z-index: 4;
+
+  animation: nodePulse 2.5s ease-in-out infinite;
+}
+
+.node-one {
+  left: 9%;
+  top: 29%;
+}
+
+.node-two {
+  left: 72%;
+  top: 24%;
+
+  animation-delay: 0.5s;
+}
+
+.node-three {
+  left: 17%;
+  top: 70%;
+
+  animation-delay: 1s;
+}
+
+.node-four {
+  left: 78%;
+  top: 67%;
+
+  animation-delay: 1.5s;
+}
+
+.node-five {
+  left: 48%;
+  top: 10%;
+
+  animation-delay: 2s;
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    transform: scale(0.7);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+}
+
+
+/* =========================================
+   MEDICAL DATA CARDS
+========================================= */
+
+.medical-card {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 14px;
+
+  min-width: 135px;
+
+  border-radius: 12px;
+
+  background: rgba(14, 18, 32, 0.62);
+
+  border: 1px solid rgba(130, 140, 255, 0.15);
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+
+  backdrop-filter: blur(14px);
+
+  z-index: 6;
+
+  animation: cardFloat 5s ease-in-out infinite;
+}
+
+.medical-card .card-icon {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: rgba(99, 102, 241, 0.12);
+
+  color: #8994ff;
+
+  font-size: 15px;
+}
+
+.medical-card small {
+  display: block;
+
+  color: #66718d;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.medical-card strong {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #dce2ff;
+
+  font-size: 11px;
+
+  letter-spacing: 0.4px;
+}
+
+.card-glucose {
+  left: 2%;
+  top: 17%;
+}
+
+.card-bmi {
+  right: 0;
+  top: 47%;
+
+  animation-delay: 1.2s;
+}
+
+.card-age {
+  left: 14%;
+  bottom: 9%;
+
+  animation-delay: 2.2s;
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+
+/* =========================================
+   ECG
+========================================= */
+
+.ecg-container {
+  position: absolute;
+
+  width: 420px;
+  height: 105px;
+
+  left: 5%;
+  bottom: 25%;
+
+  opacity: 0.55;
+
+  z-index: 2;
+}
+
+.ecg-label {
+  margin-bottom: 4px;
+
+  color: #626c88;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.ecg-container svg {
+  width: 100%;
+  height: 75px;
+
+  overflow: visible;
+}
+
+.ecg-line {
+  fill: none;
+
+  stroke: #737fff;
+
+  stroke-width: 1.5;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+
+  filter:
+    drop-shadow(0 0 5px rgba(100, 114, 255, 0.65));
+
+  stroke-dasharray: 500;
+
+  stroke-dashoffset: 500;
+
+  animation: ecgDraw 3.5s linear infinite;
+}
+
+@keyframes ecgDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.intro-visual {
+  filter: saturate(0.8);
+}
+
+.heart-core {
+  opacity: 0.65;
+}
+
+.medical-card {
+  opacity: 0.65;
+}
+
+.data-node {
+  opacity: 0.45;
+}
+
+.network-line {
+  opacity: 0.25;
+}
+
+.ecg-container {
+  opacity: 0.45;
 }
