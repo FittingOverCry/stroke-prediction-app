@@ -40,7 +40,7 @@ function App() {
         setPerformanceError("");
 
         const response = await fetch(
-          "https://stroke-prediction-api-0nr9.onrender.com/model-performance"
+          "http://192.168.1.3:5000/model-performance"
         );
 
         const data = await response.json();
@@ -148,7 +148,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "https://stroke-prediction-api-0nr9.onrender.com/predict",
+        "http://192.168.1.3:5000/predict",
         {
           method: "POST",
 
@@ -274,7 +274,7 @@ function App() {
             }}
           >
             Start Assessment
-            <span>→</span>
+            <span className="button-arrow">→</span>
           </button>
 
           <button
@@ -519,7 +519,8 @@ function App() {
             className="about-back-button bottom"
             onClick={() => setShowAboutModel(false)}
           >
-            ← Back to StrokeSense
+            <span className="back-arrow">←</span>
+            Back to StrokeSense
           </button>
 
         </div>
@@ -783,7 +784,10 @@ function App() {
             className="back-button"
             onClick={handleReset}
           >
-            ← Make Another Prediction
+            <span className="back-arrow">
+              ←
+            </span>
+            Make Another Prediction
           </button>
 
         </main>
