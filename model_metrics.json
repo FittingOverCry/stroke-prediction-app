@@ -1,0 +1,21 @@
+{
+    "model": "Linear Discriminant Analysis + SMOTE",
+    "dataset_size": 5110,
+    "roc_auc": 0.8351,
+    "roc_auc_std": 0.0297,
+    "brier_score": 0.1918,
+    "baseline_brier_score": 0.0464,
+    "brier_improvement": -0.1455,
+    "evaluation": "10-fold Repeated Stratified Cross-Validation (3 repeats)",
+    "features": [
+        "gender",
+        "age",
+        "hypertension",
+        "heart_disease",
+        "work_type",
+        "Residence_type",
+        "avg_glucose_level",
+        "bmi",
+        "smoking_status"
+    ]
+}
